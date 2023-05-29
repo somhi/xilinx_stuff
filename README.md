@@ -10,3 +10,6 @@ I have different carrier boards for this FPGAs, so there could be different proj
 * DECA retro cape addon + mister sdram module + Pmod SD card + Pmod Audio + duponts
 * Neptuno carrier board
 
+## External projects
+
+* https://github.com/DECAfpga/Arcade_Galaga
