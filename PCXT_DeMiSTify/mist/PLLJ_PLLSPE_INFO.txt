@@ -1,0 +1,10 @@
+PLL_Name	PCXT:guest|pll:pll|altpll:altpll_component|pll_altpll:auto_generated|pll1
+PLLJITTER	NA
+PLLSPEmax	84
+PLLSPEmin	-53
+
+PLL_Name	PCXT:guest|pllvideo:pllvideo|altpll:altpll_component|pllvideo_altpll:auto_generated|pll1
+PLLJITTER	36
+PLLSPEmax	84
+PLLSPEmin	-53
+
