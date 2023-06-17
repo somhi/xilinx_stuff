@@ -420,8 +420,31 @@ module PCXT
     // );
 
 
-
-
+    pll pll
+    (
+        // Clock out ports
+        .clk_out1(clk_100),        // output clk_out1 //100            CLOCK_CORE
+        .clk_out2(clk_chipset),    // output clk_out2 //50             CLOCK_CHIP
+        .clk_out3(SDRAM_CLK),      // output clk_out3 //50 -2ns    
+        .clk_out4(clk_uart),       // output clk_out4 //14.7456 MHz    CLOCK_UART
+        // Status and control signals
+        .reset(1'b0),              // input reset
+        .locked(pll_locked),       // output locked
+        // Clock in ports
+        .clk_in1(CLK_50M)          // input clk_in1
+    );
+ 
+    pllvideo pllvideo 
+    (
+        // Clock out ports
+        .clk_out1(clk_28_636),        // output clk_out1 //28.636 -> 28.636      CLOCK_VGA_CGA
+        .clk_out2(clk_56_875),        // output clk_out2 //56.875 -> 57.272      CLOCK_VGA_MDA
+        // Status and control signals
+        .reset(1'b0),              // input reset
+        .locked(),                 // output locked
+        // Clock in ports
+        .clk_in1(CLK_50M)          // input clk_in1
+    );
 
 
     `ifdef MIST_SIDI    //Reset from OSD did not work in some SiDi board. This counter increases OSD reset toogle time

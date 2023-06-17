@@ -140,7 +140,7 @@ architecture RTL of a100t_cape_top is
 	-- 	);
 	-- end component;
 
-	-- signal clk_chipset : std_logic;
+	signal clk_chipset : std_logic;
 
 	signal act_led : std_logic;
 
@@ -249,7 +249,7 @@ guest : component PCXT
 		--AUDIO
 		-- DAC_L        => dac_l,
 		-- DAC_R        => dac_r,
-		-- CLK_CHIPSET  => clk_chipset,
+		CLK_CHIPSET  => clk_chipset,
 		AUDIO_L      => sigma_l,		
 		AUDIO_R      => sigma_r,		
 
@@ -280,7 +280,7 @@ guest : component PCXT
 			jtag_uart => false
 		)
 		port map(
-			clk       => CLK_50,
+			clk       => clk_chipset,					--50 MHz
 			reset_in  => SW2,							--reset_in  when 0
 			reset_out => reset_n,						--reset_out when 0
 
