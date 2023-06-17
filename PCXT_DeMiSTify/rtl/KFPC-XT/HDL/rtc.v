@@ -56,7 +56,7 @@ module rtc #(
 );
 
 reg ce_800hz;
-always @(posedge clk) begin
+always @(posedge clk) begin :rtc1
 	reg [27:0] sum = 0;
 
 	ce_800hz = 0;
@@ -68,7 +68,7 @@ always @(posedge clk) begin
 end
 
 reg ce_8192hz;
-always @(posedge clk) begin
+always @(posedge clk) begin :rtc2
 	reg [27:0] sum = 0;
 
 	ce_8192hz = 0;

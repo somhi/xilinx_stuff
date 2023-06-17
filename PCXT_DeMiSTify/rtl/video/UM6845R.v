@@ -271,7 +271,7 @@ end
 reg vde, vde_r;
 reg VSYNC_r;
 always @(posedge CLOCK) VSYNC <= VSYNC_r; // delay the same as HSYNC to not confuse the GA
-always @(posedge CLOCK) begin
+always @(posedge CLOCK) begin :vertical_output
 	reg  [3:0] vsc;
 	reg        vsync_allow;
 

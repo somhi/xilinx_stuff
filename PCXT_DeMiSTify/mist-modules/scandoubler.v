@@ -153,7 +153,7 @@ reg [COLOR_DEPTH*3-1:0] sd_out;
 // ==================================================================
 
 // 2 lines of 2**HCNT_WIDTH pixels 3*COLOR_DEPTH bit RGB
-(* ramstyle = "no_rw_check" *) reg [COLOR_DEPTH*3-1:0] sd_buffer[2*2**HCNT_WIDTH];
+(* ramstyle = "no_rw_check" *) reg [COLOR_DEPTH*3-1:0] sd_buffer[2*2**HCNT_WIDTH:2*2**HCNT_WIDTH];
 
 // use alternating sd_buffers when storing/reading data   
 reg        line_toggle;
@@ -172,7 +172,7 @@ reg [2:0] ce_divider_out;
 reg [2:0] i_div;
 wire ce_x1 = (i_div == ce_divider_in);
 
-always @(posedge clk_sys) begin
+always @(posedge clk_sys) begin :sd1
 	reg hsD, vsD;
 
 	// Pixel logic on x1 clkena
@@ -224,7 +224,7 @@ reg [2:0] sd_i_div;
 wire ce_x2 = (sd_i_div == ce_divider_out) | (sd_i_div == {1'b0,ce_divider_out[2:1]});
 
 // timing generation runs 32 MHz (twice the input signal analysis speed)
-always @(posedge clk_sys) begin
+always @(posedge clk_sys) begin :sd2
 	reg hsD;
 
 	// Output logic on x2 clkena

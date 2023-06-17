@@ -16,6 +16,8 @@
 //
 //============================================================================
 
+`include "defs.v"
+
 module PCXT
     (
         input         CLOCK_27,
@@ -99,7 +101,7 @@ module PCXT
     // 0123456789ABCDEFGHIJKLMNOPQRSTUV WXYZabcdefghijklmnopqrstuvwxyz
     // XttXX..XttXXXXXXXXXttXXXXXXXXtXX aaaaaattaaDDDDDD...XX.........
 
-	`include "build_id.v"
+	`include "build_id.vh"
 
     //CAUTION: Too many entries will hung the OSD when entering a submenu (CONF_STR < 1024 bytes)
     parameter CONF_STR = {		// options order: 0,1,2,...
@@ -383,60 +385,37 @@ module PCXT
     reg clk_9_54 = 1'b0;
     reg clk_7_16 = 1'b0;
     wire clk_4_77;
-    wire clk_cpu;
-    wire pclk;
+    reg clk_cpu;
+    reg pclk;
     wire clk_chipset;
-    wire peripheral_clock;
+    reg peripheral_clock;
     wire clk_uart;
 
     localparam [27:0] cur_rate = 28'd50000000; // clk_chipset freq
 
-	`ifdef DEMISTIFY_SOCKIT		/////  SOCKIT BOARD with Cyclone V   /////
+    // pll pll
+    // (
+    //     .inclk0(CLK_50M),
+    //     .areset(1'b0),
+    //     .c0(clk_100),			//100                           CLOCK_CORE
+    //     .c1(clk_chipset),		//50                            CLOCK_CHIP
+    //     .c2(SDRAM_CLK),			//50 -2ns
+    //     .c3(clk_uart),			//14.7456 MHz                   CLOCK_UART
+    //     .locked(pll_locked)
+    // );
 
-		assign SDRAM_CLK = clk_chipset;
+    // pllvideo pllvideo
+    // (
+    //     .inclk0(CLK_50M),
+    //     .areset(1'b0),
+    //     .c0(clk_28_636),		//28.636 -> 28.636      CLOCK_VGA_CGA
+    //     .c1(clk_56_875),		//56.875 -> 57.272      CLOCK_VGA_MDA
+    //     .locked()
+    // );
 
-		pll pll
-		(
-			.refclk(CLK_50M),
-			.rst(0),
-			.outclk_0(clk_100),			//100                   CLOCK_CORE
-			.outclk_1(clk_chipset),		//50                    CLOCK_CHIP
-			.outclk_2(clk_uart),		//14.7456 -> 14.7541    CLOCK_UART
-			.locked(pll_locked)
-		);
 
-		pllvideo pllvideo
-		(
-			.refclk(CLK_50M),
-			.rst(0),
-			.outclk_0(clk_28_636),		//28.636                CLOCK_VGA_CGA
-			.outclk_1(clk_56_875),		//56.875 -> 57.272      CLOCK_VGA_MDA
-			.locked()
-		);
 
-	`else  						/////  REST OF BOARDS    /////
 
-		pll pll
-		(
-			.inclk0(CLK_50M),
-			.areset(1'b0),
-			.c0(clk_100),			//100                           CLOCK_CORE
-			.c1(clk_chipset),		//50                            CLOCK_CHIP
-			.c2(SDRAM_CLK),			//50 -2ns
-			.c3(clk_uart),			//14.7456 MHz                   CLOCK_UART
-			.locked(pll_locked)
-		);
-
-		pllvideo pllvideo
-		(
-			.inclk0(CLK_50M),
-			.areset(1'b0),
-			.c0(clk_28_636),		//28.636 -> 28.636      CLOCK_VGA_CGA
-			.c1(clk_56_875),		//56.875 -> 57.272      CLOCK_VGA_MDA
-			.locked()
-		);
-
-	`endif
 
 
     `ifdef MIST_SIDI    //Reset from OSD did not work in some SiDi board. This counter increases OSD reset toogle time
