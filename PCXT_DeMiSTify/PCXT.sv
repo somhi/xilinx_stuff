@@ -251,6 +251,12 @@ module PCXT
         //VIDEO_ARY               <= (!ar) ? 12'd3 : 12'd0;
     end
 
+
+    wire spi_do_uio;
+    wire spi_do_dio;
+
+    assign SPI_DO = CONF_DATA0 ? spi_do_dio : spi_do_uio; // DO comes from user_io when CONF_DATA0 is low
+
     // .PS2DIV(2000) value is adequate
 
     `ifdef MIST_SIDI
@@ -265,7 +271,7 @@ module PCXT
 		// the spi interface
 		.SPI_CLK        ( SPI_SCK       ),
 		.SPI_SS_IO      ( CONF_DATA0    ),
-		.SPI_MISO       ( SPI_DO        ),   // tristate handling inside user_io
+		.SPI_MISO       ( spi_do_uio    ),   // tristate handling inside user_io
 		.SPI_MOSI       ( SPI_DI        ),
 
 		.status         ( status        ),
@@ -312,9 +318,9 @@ module PCXT
 		.SPI_SS2    ( SPI_SS2 ),
         .SPI_SS4    ( SPI_SS4 ),
 		.SPI_DI     ( SPI_DI  ),
-		.SPI_DO     ( SPI_DO  ),
+		.SPI_DO     ( spi_do_dio ),
         `ifndef MIST_SIDI
-        .SPI_DO_IN     ( SPI_DO_IN    ),
+        .SPI_DO_IN  ( SPI_DO_IN  ),
         `endif      
 
 		.ioctl_download ( ioctl_download ),
