@@ -132,7 +132,7 @@ assign conf_addr = byte_cnt;
 wire [7:0] core_type = ARCHIE ? 8'ha6 : ROM_DIRECT_UPLOAD ? 8'hb4 : 8'ha4;
 
 reg [W:0] drive_sel;
-always begin :user1
+always begin
 	integer i;
 	drive_sel = 0;
 	for(i = 0; i < SD_IMAGES; i = i + 1) if(sd_rd[i] | sd_wr[i]) drive_sel = i[W:0];
@@ -145,7 +145,7 @@ wire spi_sck = SPI_CLK;
 
 // ---------------- PS2 ---------------------
 reg ps2_clk;
-always @(posedge clk_sys) begin :user2
+always @(posedge clk_sys) begin
 	integer cnt;
 	cnt <= cnt + 1'd1;
 	if(cnt == PS2DIV) begin

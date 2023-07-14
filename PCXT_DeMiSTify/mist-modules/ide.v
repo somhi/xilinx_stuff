@@ -68,22 +68,6 @@ module ide
 	input          hdd_data_rd
 );
 
-////////////  DEBUG INFO /////////////////
-
-(* noprune *) reg [7:0]   sector_number;
-(* noprune *) reg [7:0]   sector;
-(* noprune *) reg [15:0]  cylinder;
-(* noprune *) reg [7:0]   dev_head;
-
-always @(posedge clk) begin
-    sector_number   <= tfr[2];
-    sector          <= tfr[3];
-    cylinder        <= {tfr[5], tfr[4]};
-    dev_head      <= tfr[6];
-end
-
-////////////  DEBUG INFO /////////////////
-
 localparam VCC = 1'b1;
 localparam GND = 1'b0;
 
