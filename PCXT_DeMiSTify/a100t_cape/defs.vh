@@ -8,19 +8,19 @@
 
 
 `define DEMISTIFY
-
+`define XILINX
 
 // Comment with // each `define line that apply or doesn't apply to your board.
 
 // RELEASE MACROS		[M9Ks  175 / 182  with NO_CREDITS and EMBED_8088_ROM]
-//`define EMBED_8088_ROM  	// (16 M9K)
 //`define NO_CREDITS		// (10 M9K) Remove Credits screen. For boards with not enough BRAM 
-//`define CGA_128		// (128 M9K)   
+`define CGA_128		// (128 M9K)   
+`define NO_COMPOSITE        // Disables real composite video output
 
 // DEVELOPMENT MACROS
-`define NO_CREDITS	// (10 M9K) Remove Credits screen. For boards with not enough BRAM 
-`define CGA_32		// (32 M9K)	
-`define DEBUG2		// Define if want to show DEBUG menu in OSD
+// `define NO_CREDITS	// (10 M9K) Remove Credits screen. For boards with not enough BRAM 
+// `define CGA_32		// (32 M9K)	
+// `define DEBUG2		// Define if want to show DEBUG menu in OSD
 
 /////////////////////////////////   COMPLETE LIST OF MACROS   //////////////////////////////////////
 

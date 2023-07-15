@@ -246,7 +246,7 @@ wire       io_done = (blk_size && io_cnt >= blk_size);
 reg [13:0] io_cnt;
 wire       io_stb = read_data_io | write_data_io;
 
-always @(posedge clk) begin :ide1
+always @(posedge clk) begin
 	reg old_stb, r_32;
 	old_stb <= io_stb;
 
@@ -258,7 +258,7 @@ always @(posedge clk) begin :ide1
 end
 
 reg [13:0] mgmt_cnt;
-always @(posedge clk) begin :ide2
+always @(posedge clk) begin
 	reg old_wr, old_rd;
 	
 	old_wr <= mgmt_write;

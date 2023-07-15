@@ -418,18 +418,20 @@ module cga(
       .video    (video_osd  )
     );
 
-    // // Composite video generation
-    // cga_composite comp (
-    //     .clk(clk),
-    //     .lclk(lclk),
-    //     .hclk(hclk),
-    //     .video(~vga_composite ? video_osd : video),         
-    //     .hsync(hsync_int),
-    //     .vsync_l(vsync_l),
-    //     .bw_mode(bw_mode),
-    //     .comp_video(comp_video),
-    //     .composite_out(composite_out)
-    // );
+    `ifndef NO_COMPOSITE
+    // Composite video generation
+    cga_composite comp (
+        .clk(clk),
+        .lclk(lclk),
+        .hclk(hclk),
+        .video(~vga_composite ? video_osd : video),         
+        .hsync(hsync_int),
+        .vsync_l(vsync_l),
+        .bw_mode(bw_mode),
+        .comp_video(comp_video),
+        .composite_out(composite_out)
+    );
+	`endif
 
     wire cga_de;
     assign cga_de = ~(hblank | vblank);

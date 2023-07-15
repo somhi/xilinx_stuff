@@ -5,3 +5,4 @@
 *.sim
 *.ip_user_files
 *.srcs
+*.bit
