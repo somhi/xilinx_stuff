@@ -159,7 +159,9 @@ localparam STATE_DS1b      = STATE_CAS1r + 1'd1;
 localparam STATE_READ1b    = 3'd2;
 localparam STATE_LAST      = 3'd7;
 
-reg [3:0] t;
+reg [3:0]  	t;
+reg [15:0] 	DQ_REG;
+reg 		OE;
 
 always @(posedge clk) begin
 	reg clkref_d;
@@ -337,11 +339,16 @@ always @(*) begin
 	end
 end
 
+
+assign SDRAM_DQ = OE ? DQ_REG : 16'hzzzz;
+
+
 always @(posedge clk) begin
 
 	// permanently latch ram data to reduce delays
-	sd_din <= SDRAM_DQ;
-	SDRAM_DQ <= 16'bZZZZZZZZZZZZZZZZ;
+	sd_din <= DQ_REG;
+	OE <= 0;
+	// SDRAM_DQ <= 16'bZZZZZZZZZZZZZZZZ;
 	{ SDRAM_DQMH, SDRAM_DQML } <= 2'b11;
 	sd_cmd <= CMD_NOP;  // default: idle
 	refresh_cnt <= refresh_cnt + 1'd1;
@@ -435,7 +442,8 @@ always @(posedge clk) begin
 			if (port[0] == PORT_CPU1_RAM) cpu1_ram_valid <= 1;
 			if (port[0] == PORT_CPU2_ROM) cpu2_rom_valid <= 1;
 			if (we_latch[0]) begin
-				SDRAM_DQ <= din_latch[0];
+				OE <= 1;
+				DQ_REG <= din_latch[0];
 				case(port[0])
 					PORT_REQ: port1_ack <= port1_req;
 					PORT_VRAM: begin
@@ -460,7 +468,8 @@ always @(posedge clk) begin
 		if(t == STATE_CAS1w && we_latch[1]) begin
 			sd_cmd <= CMD_WRITE;
 			{ SDRAM_DQMH, SDRAM_DQML } <= ~ds[1];
-			SDRAM_DQ <= din_latch[1];
+			OE <= 1;
+			DQ_REG <= din_latch[1];
 			case(port[1])
 				PORT_REQ: port2_ack <= port2_req;
 				default: ;
