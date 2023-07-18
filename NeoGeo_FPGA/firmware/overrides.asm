@@ -1,0 +1,23 @@
+	.section	.data.0
+	.weak	_joy_keymap
+_joy_keymap:
+	.byte	26
+	.byte	159
+	.byte	88
+	.byte	18
+	.byte	17
+	.byte	20
+	.byte	29
+	.byte	27
+	.byte	28
+	.byte	35
+	.byte	74
+	.byte	167
+	.byte	90
+	.byte	89
+	.byte	145
+	.byte	148
+	.byte	245
+	.byte	242
+	.byte	235
+	.byte	244

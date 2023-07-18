@@ -1,0 +1,47 @@
+Info: *******************************************************************
+Info: Running Quartus Prime Shell
+    Info: Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
+    Info: Copyright (C) 2017  Intel Corporation. All rights reserved.
+    Info: Your use of Intel Corporation's design tools, logic functions 
+    Info: and other software and tools, and its AMPP partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Intel Program License 
+    Info: Subscription Agreement, the Intel Quartus Prime License Agreement,
+    Info: the Intel FPGA IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Intel and sold by Intel or its authorized distributors.  Please
+    Info: refer to the applicable agreement for further details.
+    Info: Processing started: Sun Jun 25 22:51:43 2023
+Info: Command: quartus_sh --flow compile mist/NeoGeo_MiST.qpf
+Info: Quartus(args): compile mist/NeoGeo_MiST.qpf
+Info: Project Name = /home/jordi/Documents/Coding/FPGA/Deca_17/_A_WIP/NeoGeo/NeoGeo_FPGA/mist/NeoGeo_MiST
+Info: Revision Name = NeoGeo_MiST
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
+    Info: Processing started: Sun Jun 25 22:51:43 2023
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off NeoGeo_MiST -c NeoGeo_MiST
+Info (20034): Auto device selection is not supported for Cyclone V device family. The default device, 5CGXFC7C7F23C8, is set.
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20032): Parallel compilation is enabled and will use up to 2 processors
+Error (10054): Verilog HDL File I/O error at NeoGeo_MiST.sv(37): can't open Verilog Design File "build_id.v" File: /home/jordi/Documents/Coding/FPGA/Deca_17/_A_WIP/NeoGeo/NeoGeo_FPGA/mist/NeoGeo_MiST.sv Line: 37
+Critical Warning (10191): Verilog HDL Compiler Directive warning at NeoGeo_MiST.sv(66): text macro "BUILD_DATE" is undefined File: /home/jordi/Documents/Coding/FPGA/Deca_17/_A_WIP/NeoGeo/NeoGeo_FPGA/mist/NeoGeo_MiST.sv Line: 66
+Error (10112): Ignored design unit "NeoGeo_MiST" at NeoGeo_MiST.sv(1) due to previous errors File: /home/jordi/Documents/Coding/FPGA/Deca_17/_A_WIP/NeoGeo/NeoGeo_FPGA/mist/NeoGeo_MiST.sv Line: 1
+Error: Quartus Prime Analysis & Synthesis was unsuccessful. 2 errors, 2 warnings
+    Error: Peak virtual memory: 921 megabytes
+    Error: Processing ended: Sun Jun 25 22:51:49 2023
+    Error: Elapsed time: 00:00:06
+    Error: Total CPU time (on all processors): 00:00:14
+Error (293001): Quartus Prime Full Compilation was unsuccessful. 4 errors, 2 warnings
+Error: Flow compile (for project /home/jordi/Documents/Coding/FPGA/Deca_17/_A_WIP/NeoGeo/NeoGeo_FPGA/mist/NeoGeo_MiST) was not successful
+Error: ERROR: Error(s) found while running an executable. See report file(s) for error message(s). Message log indicates which executable was run last.
+
+Error (23031): Evaluation of Tcl script /opt/altera/13.1/quartus/common/tcl/internal/qsh_flow.tcl unsuccessful
+Error: Quartus Prime Shell was unsuccessful. 11 errors, 2 warnings
+    Error: Peak virtual memory: 772 megabytes
+    Error: Processing ended: Sun Jun 25 22:51:50 2023
+    Error: Elapsed time: 00:00:07
+    Error: Total CPU time (on all processors): 00:00:15

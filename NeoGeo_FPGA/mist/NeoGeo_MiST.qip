@@ -1,0 +1,5 @@
+set_global_assignment -name QIP_FILE [file join $::quartus(qip_path) ../rtl/neogeo.qip]
+set_global_assignment -name QIP_FILE [file join $::quartus(qip_path) mist-modules/mist.qip]
+set_global_assignment -name SDC_FILE [file join $::quartus(qip_path) NeoGeo.sdc]
+set_global_assignment -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) NeoGeo_MiST.sv]
+
