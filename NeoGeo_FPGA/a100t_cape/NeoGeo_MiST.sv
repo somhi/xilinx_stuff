@@ -88,14 +88,27 @@ assign SDRAM_CKE = 1;
 
 wire CLK_96M, CLK_48M;
 wire pll_locked;
-pll_mist pll(
-	.inclk0(CLOCK_27),
-	.c0(SDRAM_CLK),
-//	.c0(CLK_96M),
-	.c1(CLK_96M),
-	.c2(CLK_48M),
-	.locked(pll_locked)
-	);
+// pll_mist pll(
+// 	.inclk0(CLOCK_27),
+// 	.c0(SDRAM_CLK),
+// //	.c0(CLK_96M),
+// 	.c1(CLK_96M),
+// 	.c2(CLK_48M),
+// 	.locked(pll_locked)
+// 	);
+
+pll_mist pll
+(
+	// Clock out ports
+	.clk_out1(SDRAM_CLK),        
+	.clk_out2(CLK_96M),    
+	.clk_out3(CLK_48M),          
+	// Status and control signals
+	.reset(1'b0),              // input reset
+	.locked(pll_locked),       // output locked
+	// Clock in ports
+	.clk_in1(CLOCK_27)          // input clk_in1
+);
 
 wire [31:0] status;
 wire  [1:0] buttons;

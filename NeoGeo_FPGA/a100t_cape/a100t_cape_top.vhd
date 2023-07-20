@@ -111,10 +111,9 @@ architecture RTL of a100t_cape_top is
 	signal rs232_txd : std_logic;
 
 	-- IO
-	signal joya : std_logic_vector(7 downto 0);
-	signal joyb : std_logic_vector(7 downto 0);
-	signal joyc : std_logic_vector(7 downto 0);
-	signal joyd : std_logic_vector(7 downto 0);
+	signal joya : std_logic_vector(demistify_joybits-1 downto 0);
+	signal joyb : std_logic_vector(demistify_joybits-1 downto 0);
+
 
 	-- DAC AUDIO
 	signal dac_l : signed(15 downto 0);
@@ -142,6 +141,8 @@ architecture RTL of a100t_cape_top is
 
 	signal act_led : std_logic;
 
+	signal CLK_50_buf : std_logic;
+	
 	alias clock_input 	: std_logic is CLK_50;
 	alias sigma_l : std_logic is PWM_AUDIO_L;
 	alias sigma_r : std_logic is PWM_AUDIO_R;
@@ -167,10 +168,9 @@ ps2_keyboard_clk_in <= PS2_KEYBOARD_CLK;
 PS2_KEYBOARD_CLK    <= '0' when ((ps2_keyboard_clk_out = '0') and (intercept = '0') ) else 'Z';
 
 JOYX_SEL_O  <= '1';
-joya        <= "11" & JOY1_B2_P9 & JOY1_B1_P6 & JOY1_RIGHT & JOY1_LEFT & JOY1_DOWN & JOY1_UP;
+joya        <= "1111" & JOY1_B2_P9 & JOY1_B1_P6 & JOY1_RIGHT & JOY1_LEFT & JOY1_DOWN & JOY1_UP;
 joyb        <= (others => '1');
-joyc        <= (others => '1');
-joyd        <= (others => '1');
+
 
 VGA_R       <= vga_red(7 downto 4);
 VGA_G       <= vga_green(7 downto 4);
@@ -245,6 +245,12 @@ guest : component NeoGeo_MiST
 	);
 
 
+	clkin1_ibuf : entity work.IBUF
+	port map (
+		O => CLK_50_buf,
+	    I => CLK_50
+	); 
+
 	-- Pass internal signals to external SPI interface
 	sd_clk <= spi_clk_int;
 	spi_do <= sd_miso when spi_ss4='0' else 'Z'; -- to guest
@@ -260,7 +266,7 @@ guest : component NeoGeo_MiST
 			jtag_uart => false
 		)
 		port map(
-			clk       => CLK_50,					--50 MHz
+			clk       => CLK_50_buf,					--50 MHz
 			reset_in  => SW2,							--reset_in  when 0
 			reset_out => reset_n,						--reset_out when 0
 
