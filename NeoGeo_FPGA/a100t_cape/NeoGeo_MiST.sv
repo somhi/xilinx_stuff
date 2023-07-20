@@ -8,7 +8,8 @@ module NeoGeo_MiST(
 	output        AUDIO_L,
 	output        AUDIO_R,
 	input         SPI_SCK,
-	inout         SPI_DO,
+	input         SPI_DO_IN,
+	output        SPI_DO,	
 	input         SPI_DI,
 	input         SPI_SS2,
 	input         SPI_SS3,
@@ -37,6 +38,11 @@ module NeoGeo_MiST(
 `include "build_id.vh" 
 
 wire [6:0] core_mod;
+
+wire spi_do_uio;
+wire spi_do_dio;
+assign SPI_DO = CONF_DATA0 ? spi_do_dio : spi_do_uio; // DO comes from user_io when CONF_DATA0 is low
+
 
 //`define DEBUG 1
 
@@ -147,7 +153,7 @@ user_io(
 	.conf_str       (CONF_STR       ),
 	.SPI_CLK        (SPI_SCK        ),
 	.SPI_SS_IO      (CONF_DATA0     ),
-	.SPI_MISO       (SPI_DO         ),
+	.SPI_MISO       (spi_do_uio         ),
 	.SPI_MOSI       (SPI_DI         ),
 	.buttons        (buttons        ),
 	.switches       (switches       ),
@@ -195,7 +201,8 @@ data_io #(.ROM_DIRECT_UPLOAD(1'b1)) data_io(
 	.SPI_SS2       ( SPI_SS2      ),
 	.SPI_SS4       ( SPI_SS4      ),
 	.SPI_DI        ( SPI_DI       ),
-	.SPI_DO        ( SPI_DO       ),
+	.SPI_DO        ( spi_do_dio   ),
+	.SPI_DO_IN     ( SPI_DO_IN    ),
 	.clkref_n      ( 1'b0         ),
 	.ioctl_download( ioctl_downl  ),
 	.ioctl_index   ( ioctl_index  ),
