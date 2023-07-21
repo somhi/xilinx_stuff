@@ -20,6 +20,8 @@ module NeoGeo_MiST(
 	`ifdef DEMISTIFY
     output [15:0] DAC_L,
     output [15:0] DAC_R,
+
+	output 		  CLOCK_27_buff,
     `endif
 
 	output [12:0] SDRAM_A,
@@ -103,7 +105,7 @@ wire pll_locked;
 // 	.locked(pll_locked)
 // 	);
 
-pll_mist pll
+pll_mist pll			// Xilinx PLL
 (
 	// Clock out ports
 	.clk_out1(SDRAM_CLK),        
@@ -113,7 +115,8 @@ pll_mist pll
 	.reset(1'b0),              // input reset
 	.locked(pll_locked),       // output locked
 	// Clock in ports
-	.clk_in1(CLOCK_27)          // input clk_in1
+	.clk_in1(CLOCK_27),         // input  clk_in1
+	.clk_in1_pll(CLOCK_27_buff)	// output clk_in1 buffered
 );
 
 wire [31:0] status;

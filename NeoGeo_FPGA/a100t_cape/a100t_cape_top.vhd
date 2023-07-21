@@ -205,6 +205,8 @@ guest : component NeoGeo_MiST
 	port map
 	(
 		CLOCK_27   => clock_input,
+		CLOCK_27_buff => CLK_50_buf,
+
 		LED 	   => act_led,
 
 		--SDRAM
@@ -246,12 +248,6 @@ guest : component NeoGeo_MiST
 
 	);
 
-
-	clkin1_ibuf : entity work.IBUF
-	port map (
-		O => CLK_50_buf,
-	    I => CLK_50
-	); 
 
 	-- Pass internal signals to external SPI interface
 	sd_clk <= spi_clk_int;

@@ -1,89 +1,45 @@
-## Generated SDC file "vectrex_MiST.out.sdc"
-
-## Copyright (C) 1991-2013 Altera Corporation
-## Your use of Altera Corporation's design tools, logic functions 
-## and other software and tools, and its AMPP partner logic 
-## functions, and any output files from any of the foregoing 
-## (including device programming or simulation files), and any 
-## associated documentation or information are expressly subject 
-## to the terms and conditions of the Altera Program License 
-## Subscription Agreement, Altera MegaCore Function License 
-## Agreement, or other applicable license agreement, including, 
-## without limitation, that your use is for the sole purpose of 
-## programming logic devices manufactured by Altera and sold by 
-## Altera or its authorized distributors.  Please refer to the 
-## applicable agreement for further details.
-
-
-## VENDOR  "Altera"
-## PROGRAM "Quartus II"
-## VERSION "Version 13.1.0 Build 162 10/23/2013 SJ Web Edition"
-
-## DATE    "Sun Jun 24 12:53:00 2018"
-
-##
-## DEVICE  "EP3C25E144C8"
-##
-
 # Clock constraints
 
 # Automatically constrain PLL and other generated clocks
-derive_pll_clocks -create_base_clocks
+# derive_pll_clocks -create_base_clocks
 
 # Automatically calculate clock uncertainty to jitter and other effects.
-derive_clock_uncertainty
+# derive_clock_uncertainty
 
-# tsu/th constraints
 
-# tco constraints
 
-# tpd constraints
+# Set pin definitions for downstream constraints
+set RAM_CLK DRAM_CLK
+set RAM_OUT {DRAM_DQ* DRAM_ADDR* DRAM_BA* DRAM_RAS_N DRAM_CAS_N DRAM_WE_N DRAM_*DQM DRAM_CS_N DRAM_CKE}
+set RAM_IN {DRAM_D*}
 
-#**************************************************************
-# Time Information
-#**************************************************************
+set VGA_OUT {VGA_R[*] VGA_G[*] VGA_B[*] VGA_HS VGA_VS}
 
-set_time_format -unit ns -decimal_places 3
-
+# non timing-critical pins would be in the "FALSE_IN/OUT" collection (IN inputs, OUT outputs)
+set FALSE_OUT {LED* PWM_AUDIO_* PS2_* JOYX_SEL_O UART_TXD SD_CS_N_O SD_MOSI_O SD_SCLK_O}
+set FALSE_IN  {SW* PS2_* JOY1* EAR UART_RXD SD_MISO_I}
 
 
 #**************************************************************
 # Create Clock
 #**************************************************************
+create_clock -name {clk_50} -period 20.000 -waveform {0.000 10.000} { CLK_50 }
 
-# create_clock -name {SPI_SCK}  -period 41.666 -waveform { 20.8 41.666 } [get_ports {SPI_SCK}]
+create_generated_clock -name spiclk -source [get_ports {CLK_50}] -divide_by 16 [get_nets {controller/spi/sck_i_1_n_0}]
 
-set sdram_clk "${topmodule}pll|altpll_component|auto_generated|pll1|clk[0]"
-set mem_clk   "${topmodule}pll|altpll_component|auto_generated|pll1|clk[1]"
-set vid_clk   "${topmodule}pll|altpll_component|auto_generated|pll1|clk[2]"
-set game_clk  "${topmodule}pll|altpll_component|auto_generated|pll1|clk[2]"
+set hostclk { clk_50 }
+set supportclk { clk_50 }
 
-#**************************************************************
-# Create Generated Clock
-#**************************************************************
+# set sdram_clk "guest/pll/clk_out1"
+set sdram_clk "clk_out1_pll"
+set mem_clk   "clk_out2_pll"
+set vid_clk   "clk_out3_pll"
+set game_clk  "clk_out3_pll"
 
-
-#**************************************************************
-# Set Clock Latency
-#**************************************************************
-
-
-
-#**************************************************************
-# Set Clock Uncertainty
-#**************************************************************
 
 #**************************************************************
 # Set Input Delay
 #**************************************************************
-
-#set_input_delay -add_delay  -clock_fall -clock [get_clocks {CLOCK_27}]  1.000 [get_ports {CLOCK_27}]
-#set_input_delay -add_delay  -clock_fall -clock [get_clocks {SPI_SCK}]  1.000 [get_ports {CONF_DATA0}]
-#set_input_delay -add_delay  -clock_fall -clock [get_clocks {SPI_SCK}]  1.000 [get_ports {SPI_DI}]
-#set_input_delay -add_delay  -clock_fall -clock [get_clocks {SPI_SCK}]  1.000 [get_ports {SPI_SCK}]
-#set_input_delay -add_delay  -clock_fall -clock [get_clocks {SPI_SCK}]  1.000 [get_ports {SPI_SS2}]
-#set_input_delay -add_delay  -clock_fall -clock [get_clocks {SPI_SCK}]  1.000 [get_ports {SPI_SS3}]
-
 set_input_delay -clock [get_clocks $sdram_clk] -reference_pin [get_ports ${RAM_CLK}] -max 6.4 [get_ports ${RAM_IN}]
 set_input_delay -clock [get_clocks $sdram_clk] -reference_pin [get_ports ${RAM_CLK}] -min 3.2 [get_ports ${RAM_IN}]
 
@@ -91,13 +47,6 @@ set_input_delay -clock [get_clocks $sdram_clk] -reference_pin [get_ports ${RAM_C
 #**************************************************************
 # Set Output Delay
 #**************************************************************
-
-# set_output_delay -add_delay   -clock [get_clocks {SPI_SCK}] 1.000 [get_ports {SPI_DO}]
-#set_output_delay -add_delay   -clock [get_clocks $game_clk]  1.000 [get_ports {AUDIO_L}]
-#set_output_delay -add_delay   -clock [get_clocks $game_clk]  1.000 [get_ports {AUDIO_R}]
-#set_output_delay -add_delay   -clock [get_clocks $game_clk] 1.000 [get_ports {LED}]
-#set_output_delay -add_delay   -clock [get_clocks $vid_clk]  1.000 [get_ports {VGA_*}]
-
 set_output_delay -clock [get_clocks $sdram_clk] -reference_pin [get_ports ${RAM_CLK}] -max 1.5 [get_ports ${RAM_OUT}]
 set_output_delay -clock [get_clocks $sdram_clk] -reference_pin [get_ports ${RAM_CLK}] -min -0.8 [get_ports ${RAM_OUT}]
 
@@ -105,16 +54,13 @@ set_output_delay -clock [get_clocks $sdram_clk] -reference_pin [get_ports ${RAM_
 #**************************************************************
 # Set Clock Groups
 #**************************************************************
+set_clock_groups -asynchronous -group [get_clocks spiclk] -group [get_clocks -include_generated_clocks]
+set_clock_groups -asynchronous -group [get_clocks ${game_clk}]  -group [get_clocks ${supportclk}]
 
-#set_clock_groups -asynchronous -group [get_clocks {SPI_SCK}] -group [get_clocks {pll|altpll_component|auto_generated|pll1|clk[*]}]
-set_clock_groups -asynchronous -group [get_clocks spiclk] -group [get_clocks ${topmodule}pll|altpll_component|auto_generated|pll1|clk[*]]
-set_clock_groups -asynchronous -group [get_clocks ${game_clk}] -group [get_clocks ${supportclk}]
-
-
+# guest/pll/plle2_adv_inst/CLKOUT2]]
 #**************************************************************
 # Set False Path
 #**************************************************************
-
 set_false_path -to ${FALSE_OUT}
 set_false_path -from ${FALSE_IN}
 set_false_path -to ${VGA_OUT}
@@ -123,32 +69,15 @@ set_false_path -to ${VGA_OUT}
 #**************************************************************
 # Set Multicycle Path
 #**************************************************************
-
 set_multicycle_path -from [get_clocks $sdram_clk] -to [get_clocks $mem_clk] -setup 2
-set_multicycle_path -from ${topmodule}neogeo_top|M68KCPU|FX68K|excUnit|aob[*]  -to [get_clocks $mem_clk] -setup 2
-set_multicycle_path -from ${topmodule}neogeo_top|M68KCPU|FX68K|excUnit|aob[*]  -to [get_clocks $mem_clk] -hold 1
-set_multicycle_path -from ${topmodule}neogeo_top|Z80CPU|cpu|u0|A[*]  -to [get_clocks $mem_clk] -setup 2
-set_multicycle_path -from ${topmodule}neogeo_top|Z80CPU|cpu|u0|A[*]  -to [get_clocks $mem_clk] -hold 1
+set_multicycle_path -from [get_cells guest/neogeo_top/M68KCPU/FX68K/excUnit/aob*]  -to [get_clocks $mem_clk] -setup 2
+set_multicycle_path -from [get_cells guest/neogeo_top/M68KCPU/FX68K/excUnit/aob*]  -to [get_clocks $mem_clk] -hold 1
+set_multicycle_path -from [get_cells guest/neogeo_top/Z80CPU/cpu/u0/A*]  -to [get_clocks $mem_clk] -setup 2
+set_multicycle_path -from [get_cells guest/neogeo_top/Z80CPU/cpu/u0/A*]  -to [get_clocks $mem_clk] -hold 1
 
-set_multicycle_path -from ${topmodule}*Size[*]  -to [get_clocks $mem_clk] -setup 2
-set_multicycle_path -from ${topmodule}*Size[*]  -to [get_clocks $mem_clk] -hold 1
-set_multicycle_path -from ${topmodule}pcm_merged  -to [get_clocks $mem_clk] -setup 2
-set_multicycle_path -from ${topmodule}pcm_merged  -to [get_clocks $mem_clk] -hold 1
+set_multicycle_path -from [get_cells guest/*Size*] -to [get_clocks $mem_clk] -setup 2
+set_multicycle_path -from [get_cells guest/*Size*] -to [get_clocks $mem_clk] -hold 1
+set_multicycle_path -from [get_cells guest/pcm_merged*] -to [get_clocks $mem_clk] -setup 2
+set_multicycle_path -from [get_cells guest/pcm_merged*] -to [get_clocks $mem_clk] -hold 1
 
-
-#**************************************************************
-# Set Maximum Delay
-#**************************************************************
-
-
-
-#**************************************************************
-# Set Minimum Delay
-#**************************************************************
-
-
-
-#**************************************************************
-# Set Input Transition
-#**************************************************************
 

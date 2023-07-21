@@ -52,7 +52,9 @@ constant demistify_serialdebug : std_logic := '0';
 	COMPONENT NeoGeo_MiST -- Rename to match the guest core
 		PORT
 		(
-			CLOCK_27 	:	IN STD_LOGIC;	-- Comment out one of these two lines
+			CLOCK_27 	:	IN STD_LOGIC;	
+			CLOCK_27_buff	:  OUT STD_LOGIC;
+
 			LED			:	 OUT STD_LOGIC;
 
 			SDRAM_DQ	:	 INOUT STD_LOGIC_VECTOR(15 DOWNTO 0);

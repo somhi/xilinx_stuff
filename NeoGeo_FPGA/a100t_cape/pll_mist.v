@@ -56,7 +56,7 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_out1__96.00000____-52.000______50.0______175.200____161.614
+// clk_out1__96.00000____-xx.000______50.0______175.200____161.614
 // clk_out2__96.00000______0.000______50.0______210.144____161.614
 // clk_out3__48.00000____  0.000______50.0______210.144____161.614
 //
@@ -77,17 +77,15 @@ module pll_mist
   // Status and control signals
   input         reset,
   output        locked,
-  input         clk_in1
+  input         clk_in1,
+  output        clk_in1_pll
  );
   // Input buffering
   //------------------------------------
-wire clk_in1_pll;
 wire clk_in2_pll;
   IBUF clkin1_ibufg
    (.O (clk_in1_pll),
     .I (clk_in1));
-
-
 
 
   // Clocking PRIMITIVE
@@ -128,7 +126,7 @@ wire clk_in2_pll;
     .CLKFBOUT_MULT        (25),
     .CLKFBOUT_PHASE       (0.000),
     .CLKOUT0_DIVIDE       (13),
-    .CLKOUT0_PHASE        (-52.000),
+    .CLKOUT0_PHASE        (-100.000),
     .CLKOUT0_DUTY_CYCLE   (0.500),
     .CLKOUT1_DIVIDE       (13),
     .CLKOUT1_PHASE        (0.000),
