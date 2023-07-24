@@ -13,7 +13,6 @@ entity a100t_cape_top is
 		CLK_50     : in std_logic;
 		SW2        : in std_logic;
 		LED5       : out std_logic := '1';
-		LED6       : out std_logic := '1';
 		-- SDRAM
 		DRAM_CLK   : out std_logic;
 		DRAM_CKE   : out std_logic;
@@ -29,9 +28,9 @@ entity a100t_cape_top is
 		-- VGA
 		VGA_HS : out std_logic;
 		VGA_VS : out std_logic;
-		VGA_R  : out std_logic_vector(3 downto 0);
-		VGA_G  : out std_logic_vector(3 downto 0);
-		VGA_B  : out std_logic_vector(3 downto 0);
+		VGA_R  : out std_logic_vector(5 downto 0);
+		VGA_G  : out std_logic_vector(5 downto 0);
+		VGA_B  : out std_logic_vector(5 downto 0);
 		-- EAR
 		-- EAR 			 : in std_logic;
 		-- PS2
@@ -39,19 +38,9 @@ entity a100t_cape_top is
 		PS2_KEYBOARD_DAT : inout std_logic := '1';
 		PS2_MOUSE_CLK    : inout std_logic;
 		PS2_MOUSE_DAT    : inout std_logic;
-		-- UART
-		UART_RXD : in std_logic;
-		UART_TXD : out std_logic;
-		SPI_CS1 : in std_logic;			--CTS
-		SPI_CS2 : out std_logic;		--RTS
 		-- JOYSTICK
-		JOY1_B2_P9 : in std_logic;
-		JOY1_B1_P6 : in std_logic;
-		JOY1_UP    : in std_logic;
-		JOY1_DOWN  : in std_logic;
-		JOY1_LEFT  : in std_logic;
-		JOY1_RIGHT : in std_logic;
-		JOYX_SEL_O : out std_logic := '1';
+
+		
 		-- SD Card
 		SD_CS_N_O   : out std_logic := '1';
 		SD_SCLK_O   : out std_logic := '0';
@@ -167,14 +156,15 @@ PS2_KEYBOARD_DAT    <= '0' when ((ps2_keyboard_dat_out = '0') and (intercept = '
 ps2_keyboard_clk_in <= PS2_KEYBOARD_CLK;
 PS2_KEYBOARD_CLK    <= '0' when ((ps2_keyboard_clk_out = '0') and (intercept = '0') ) else 'Z';
 
-JOYX_SEL_O  <= '1';
-joya        <= "1111" & JOY1_B2_P9 & JOY1_B1_P6 & JOY1_RIGHT & JOY1_LEFT & JOY1_DOWN & JOY1_UP;
+-- JOYX_SEL_O  <= '1';
+-- joya        <= "1111" & JOY1_B2_P9 & JOY1_B1_P6 & JOY1_RIGHT & JOY1_LEFT & JOY1_DOWN & JOY1_UP;
+joya        <= (others => '1');
 joyb        <= (others => '1');
 
 
-VGA_R       <= vga_red(7 downto 4);
-VGA_G       <= vga_green(7 downto 4);
-VGA_B       <= vga_blue(7 downto 4);
+VGA_R       <= vga_red(7 downto 2);
+VGA_G       <= vga_green(7 downto 2);
+VGA_B       <= vga_blue(7 downto 2);
 VGA_HS      <= vga_hsync;
 VGA_VS      <= vga_vsync;
 
