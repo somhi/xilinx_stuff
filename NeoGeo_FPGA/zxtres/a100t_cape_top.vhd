@@ -131,6 +131,8 @@ architecture RTL of a100t_cape_top is
 	signal act_led : std_logic;
 
 	signal CLK_50_buf : std_logic;
+
+	signal reset_in : std_logic;
 	
 	alias clock_input 	: std_logic is CLK_50;
 	alias sigma_l : std_logic is PWM_AUDIO_L;
@@ -255,7 +257,7 @@ guest : component NeoGeo_MiST
 		)
 		port map(
 			clk       => CLK_50_buf,					--50 MHz
-			reset_in  => SW2,							--reset_in  when 0
+			reset_in  => reset_in,							--reset_in  when 0
 			reset_out => reset_n,						--reset_out when 0
 
 			-- SPI signals
@@ -294,6 +296,7 @@ guest : component NeoGeo_MiST
 			intercept => intercept
 		);
 
+	reset_in <= not SW2;
 	LED5 <= not act_led;
 
 end rtl;
