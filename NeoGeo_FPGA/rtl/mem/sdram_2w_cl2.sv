@@ -340,20 +340,22 @@ always @(*) begin
 end
 
 
-assign SDRAM_DQ = OE ? DQ_REG : 16'hzzzz;
-
+assign SDRAM_DQ = OE ? DQ_REG : 16'bZZZZZZZZZZZZZZZZ;
 
 always @(posedge clk) begin
 
 	// permanently latch ram data to reduce delays
-	sd_din <= DQ_REG;
-	OE <= 0;
-	// SDRAM_DQ <= 16'bZZZZZZZZZZZZZZZZ;
+	sd_din <= SDRAM_DQ;
+	OE <= 0;	
+//	SDRAM_DQ <= 16'bZZZZZZZZZZZZZZZZ;
+
+
 	{ SDRAM_DQMH, SDRAM_DQML } <= 2'b11;
 	sd_cmd <= CMD_NOP;  // default: idle
 	refresh_cnt <= refresh_cnt + 1'd1;
 
 	if(init) begin
+		OE <= 0;
 		cpu1_rom_valid <= 0;
 		cpu1_ram_valid <= 0;
 		cpu2_rom_valid <= 0;
@@ -377,6 +379,7 @@ always @(posedge clk) begin
 			end
 		end
 	end else begin
+		OE <= 0;
 		if (!cpu1_rom_cs) cpu1_rom_valid <= 0;
 		if (~|cpu1_ram_ds) cpu1_ram_valid <= 0;
 		if (!cpu2_rom_cs) cpu2_rom_valid <= 0;
