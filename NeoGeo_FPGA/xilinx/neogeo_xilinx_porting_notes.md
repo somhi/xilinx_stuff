@@ -2,12 +2,12 @@
 
 ### Changed files for Xilinx port
 
-Those files are included in a100t_cape folder: 
+Those files are included in respective Xilinx fpga folder: 
 
 * NeoGeo_MiST.sv
 * demistify_config_pkg.vhd
 * rtl/mem/dpram.v
-* rtl/common/data_io.v
+* mist/mist-modules/data_io.v
 * NeoGeo.sdc
 
 
@@ -51,11 +51,15 @@ Those files are included in a100t_cape folder:
 
   * Do not use direct FPGA clock (CLK_50) as input to modules. A buffer is needed [a100t_cape_top.vhd]
 
-    
+* Remove design checkpoint files before distributing sources (.dcp files). That is automatically added after synthesis if design run synthesis option "auto_incremental_checkpoint" is set.   Uncheck that property to avoid those .dcp files being added to the project.
+
+* Run TCL sources before synthesis. Check design run synthesis option "tcl.pre"
 
 ### Common adaptations to code to work with Xilinx
 
 https://github.com/sy2002/MiSTer2MEGA65/wiki/7.-Get-the-core-to-synthesize
+
+[Xilinx Design Flow for Intel FPGA and SoC Users](https://docs.xilinx.com/v/u/en-US/ug1192-xilinx-design-for-intel)  (see how to adapt constraints)
 
 signals should be defined as reg if included in always blocks
 

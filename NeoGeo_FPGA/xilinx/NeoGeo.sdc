@@ -54,7 +54,7 @@ set_output_delay -clock [get_clocks $sdram_clk] -reference_pin [get_ports ${RAM_
 #**************************************************************
 # Set Clock Groups
 #**************************************************************
-set_clock_groups -asynchronous -group [get_clocks spiclk] -group [get_clocks -include_generated_clocks]
+set_clock_groups -asynchronous -group [get_clocks spiclk] -group [get_clocks {clk_out1_pll clk_out2_pll clk_out3_pll} ]
 set_clock_groups -asynchronous -group [get_clocks ${game_clk}]  -group [get_clocks ${supportclk}]
 
 # guest/pll/plle2_adv_inst/CLKOUT2]]

@@ -8,11 +8,12 @@ use work.demistify_config_pkg.all;
 
 -------------------------------------------------------------------------
 
-entity a100t_cape_top is
+entity zxtres_top is
 	port (
 		CLK_50     : in std_logic;
-		SW2        : in std_logic;
+--		SW2        : in std_logic;
 		LED5       : out std_logic := '1';
+		LED6       : out std_logic := '1';
 		-- SDRAM
 		DRAM_CLK   : out std_logic;
 		DRAM_CKE   : out std_logic;
@@ -28,9 +29,9 @@ entity a100t_cape_top is
 		-- VGA
 		VGA_HS : out std_logic;
 		VGA_VS : out std_logic;
-		VGA_R  : out std_logic_vector(5 downto 0);
-		VGA_G  : out std_logic_vector(5 downto 0);
-		VGA_B  : out std_logic_vector(5 downto 0);
+		VGA_R  : out std_logic_vector(7 downto 0);
+		VGA_G  : out std_logic_vector(7 downto 0);
+		VGA_B  : out std_logic_vector(7 downto 0);
 		-- EAR
 		-- EAR 			 : in std_logic;
 		-- PS2
@@ -39,8 +40,10 @@ entity a100t_cape_top is
 		PS2_MOUSE_CLK    : inout std_logic;
 		PS2_MOUSE_DAT    : inout std_logic;
 		-- JOYSTICK
-
-		
+        joy_clk : out std_logic;
+        joy_load_n : out std_logic;
+        joy_data : in std_logic;
+        joy_sel : out std_logic := '1';
 		-- SD Card
 		SD_CS_N_O   : out std_logic := '1';
 		SD_SCLK_O   : out std_logic := '0';
@@ -52,7 +55,7 @@ entity a100t_cape_top is
 	);
 END entity;
 
-architecture RTL of a100t_cape_top is
+architecture RTL of zxtres_top is
 
 	-- System clocks
 	signal locked  : std_logic;
@@ -110,6 +113,24 @@ architecture RTL of a100t_cape_top is
 	signal dac_l_s: signed(15 downto 0);
 	signal dac_r_s: signed(15 downto 0);
 
+    -- Joysticks (MegaDrive 3 buttons)
+    signal joy1up  : std_logic;
+    signal joy1down  : std_logic;
+    signal joy1left  : std_logic;
+    signal joy1right  : std_logic;
+    signal joy1fire1  : std_logic;
+    signal joy1fire2  : std_logic;
+    signal joy1fire3  : std_logic;
+    signal joy1start  : std_logic;
+    signal joy2up  : std_logic;
+    signal joy2down  : std_logic;
+    signal joy2left  : std_logic;
+    signal joy2right  : std_logic;
+    signal joy2fire1  : std_logic;
+    signal joy2fire2  : std_logic;
+    signal joy2fire3  : std_logic;
+    signal joy2start  : std_logic;
+
 	-- -- I2S
 	-- signal i2s_Mck_o : std_logic;
 	-- signal i2s_Sck_o : std_logic;
@@ -131,14 +152,13 @@ architecture RTL of a100t_cape_top is
 	signal act_led : std_logic;
 
 	signal CLK_50_buf : std_logic;
-
-	signal reset_in : std_logic;
 	
 	alias clock_input 	: std_logic is CLK_50;
 	alias sigma_l : std_logic is PWM_AUDIO_L;
 	alias sigma_r : std_logic is PWM_AUDIO_R;
 
 begin
+
 
 
 -- SPI
@@ -158,17 +178,47 @@ PS2_KEYBOARD_DAT    <= '0' when ((ps2_keyboard_dat_out = '0') and (intercept = '
 ps2_keyboard_clk_in <= PS2_KEYBOARD_CLK;
 PS2_KEYBOARD_CLK    <= '0' when ((ps2_keyboard_clk_out = '0') and (intercept = '0') ) else 'Z';
 
--- JOYX_SEL_O  <= '1';
 -- joya        <= "1111" & JOY1_B2_P9 & JOY1_B1_P6 & JOY1_RIGHT & JOY1_LEFT & JOY1_DOWN & JOY1_UP;
-joya        <= (others => '1');
-joyb        <= (others => '1');
+--joyb        <= (others => '1');
 
+--joy1up, joy1down, joy1left, joy1right, joy1fire1, joy1fire2, joy1fire3, joy1start
+--joy2up, joy2down, joy2left, joy2right, joy2fire1, joy2fire2, joy2fire3, joy2start
 
-VGA_R       <= vga_red(7 downto 2);
-VGA_G       <= vga_green(7 downto 2);
-VGA_B       <= vga_blue(7 downto 2);
+joya        <= "11" & joy1start & joy1fire3 & joy1fire2 & joy1fire1 & joy1right & joy1left & joy1down & joy1up;
+joyb        <= "11" & joy2start & joy2fire3 & joy2fire2 & joy2fire1 & joy2right & joy2left & joy2down & joy2up;
+
+VGA_R       <= vga_red(7 downto 2)  &vga_red(7 downto 6);
+VGA_G       <= vga_green(7 downto 2)&vga_green(7 downto 6);
+VGA_B       <= vga_blue(7 downto 2) &vga_blue(7 downto 6);
 VGA_HS      <= vga_hsync;
 VGA_VS      <= vga_vsync;
+
+
+-- ////////////////  JoySticks  ////////////////////////
+
+los_joysticks : entity work.joydecoder
+port map(
+  clk => CLK_50_buf,
+  joy_data => joy_data,
+  joy_clk => joy_clk,
+  joy_load_n => joy_load_n,
+  joy1up => joy1up,
+  joy1down => joy1down,
+  joy1left => joy1left,
+  joy1right => joy1right,
+  joy1fire1 => joy1fire1,
+  joy1fire2 => joy1fire2,
+  joy1fire3 => joy1fire3,
+  joy1start => joy1start,
+  joy2up => joy2up,
+  joy2down => joy2down,
+  joy2left => joy2left,
+  joy2right => joy2right,
+  joy2fire1 => joy2fire1,
+  joy2fire2 => joy2fire2,
+  joy2fire3 => joy2fire3,
+  joy2start => joy2start
+);
 
 
 -- -- AUDIO CODEC
@@ -257,7 +307,7 @@ guest : component NeoGeo_MiST
 		)
 		port map(
 			clk       => CLK_50_buf,					--50 MHz
-			reset_in  => reset_in,							--reset_in  when 0
+			reset_in  => '1',							--reset_in  when 0
 			reset_out => reset_n,						--reset_out when 0
 
 			-- SPI signals
@@ -296,7 +346,6 @@ guest : component NeoGeo_MiST
 			intercept => intercept
 		);
 
-	reset_in <= not SW2;
 	LED5 <= not act_led;
 
 end rtl;
