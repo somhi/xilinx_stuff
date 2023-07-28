@@ -11,3 +11,4 @@ build_id.v
 *.ip_user_files
 *.srcs
 *.bit
+*.bin

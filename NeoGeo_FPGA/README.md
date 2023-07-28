@@ -1,3 +1,7 @@
+# testing core. For latest version go to https://github.com/zxtres/NeoGeo_FPGA
+
+
+
 # [SNK Neo Geo](https://en.wikipedia.org/wiki/Neo_Geo_(system))
 
 This is an FPGA implementation of the NEO GEO/MVS system by [Furrtek](https://www.patreon.com/furrtek/posts)

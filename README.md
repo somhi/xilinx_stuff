@@ -12,4 +12,6 @@ I have different carrier boards for this FPGAs, so there could be different proj
 
 ## External projects
 
-* https://github.com/DECAfpga/Arcade_Galaga
+* Galaga https://github.com/DECAfpga/Arcade_Galaga
+* PCXT https://github.com/somhi/PCXT_DeMiSTify
+* NeoGeo https://github.com/zxtres/NeoGeo_FPGA
